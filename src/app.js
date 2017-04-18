@@ -13,7 +13,9 @@ import Header from "./components/header"
 import Home from "./pages/home";
 import Login from "./pages/login";
 import Signup from "./pages/signup"
-import { firebaseApp } from './firebase'
+import Account from "./pages/account";
+const firebaseApp = require('firebase');
+import firebaseInit from './firebase';
 
 class App extends Component {
 
@@ -37,12 +39,22 @@ class App extends Component {
 
     firebaseApp.auth().onAuthStateChanged((user) => {
 
-      let initialView = user ? "Home" : "Login";
-
-      this.setState({
-        userLoaded: true,
-        initialView: initialView
-      })
+      if (user){
+        let initialView = user ? "Home" : "Login";
+        alert('initialView');
+        this.setState({
+          userLoaded: true,
+          initialView: initialView
+        })
+      }
+      else{
+        let initialView = user ? "Login": "Home";
+        alert('initialView222');
+        this.setState({
+          userLoaded: false,
+          initialView: initialView
+        })
+      }
     });
 
 
@@ -63,6 +75,10 @@ class App extends Component {
       case "Signup":
         return (<Signup navigator={navigator} />);
         break;
+
+      case "Account":
+        return (<Account navigator={navigator} />);
+        break;
     }
 
   }
@@ -81,7 +97,7 @@ class App extends Component {
   }
 
   render() {
-
+    alert('userloaded: ' + this.state.userLoaded)
     if (this.state.userLoaded) {
 
       return (

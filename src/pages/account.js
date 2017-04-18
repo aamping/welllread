@@ -20,7 +20,7 @@ import Login from './login';
 
 import styles from '../styles/common-styles.js';
 
-import firebaseApp from '../firebase';
+const firebaseApp = require('firebase');
 
 
 export default class account extends Component {
@@ -55,10 +55,6 @@ export default class account extends Component {
               <View style={page_styles.email_container}>
                 <Text style={page_styles.email_text}>{this.state.user.email}</Text>
               </View>
-              <Image
-                style={styles.image}
-                source={{uri: this.state.user.password.photoURL}}
-              />
               <Button
                   text="Logout"
                   onpress={this.logout.bind(this)}

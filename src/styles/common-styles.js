@@ -6,6 +6,9 @@ import {
 module.exports = StyleSheet.create({
   container: {
     flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: 23
   },
   body: {
     flex: 9,
@@ -13,10 +16,10 @@ module.exports = StyleSheet.create({
     backgroundColor: '#F5FCFF',
   },
   textinput: {
+    margin: 15,
     height: 40,
-    borderColor: 'red',
-    flex: 1,
-    borderWidth: 1
+    borderColor: 'grey',
+    borderWidth: 2
   },
   transparent_button: {
     marginTop: 10,

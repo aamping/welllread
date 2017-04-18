@@ -18,7 +18,7 @@ import Header from '../components/header';
 
 import Login from './login';
 
-import firebaseApp from '../firebase';
+const firebaseApp = require('firebase');
 
 import styles from '../styles/common-styles.js';
 

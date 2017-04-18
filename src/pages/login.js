@@ -20,7 +20,8 @@ import Header from '../components/header';
 import Signup from './signup';
 import Account from './account';
 
-import firebaseApp from '../firebase';
+const firebaseApp = require('firebase');
+//import firebaseApp from '../firebase';
 
 import styles from '../styles/common-styles.js';
 
