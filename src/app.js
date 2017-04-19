@@ -40,18 +40,13 @@ class App extends Component {
     firebaseApp.auth().onAuthStateChanged((user) => {
 
       if (user){
+        alert('user signed in');
+      }
+      else{
         let initialView = user ? "Home" : "Login";
         alert('initialView');
         this.setState({
           userLoaded: true,
-          initialView: initialView
-        })
-      }
-      else{
-        let initialView = user ? "Login": "Home";
-        alert('initialView222');
-        this.setState({
-          userLoaded: false,
           initialView: initialView
         })
       }
@@ -97,9 +92,7 @@ class App extends Component {
   }
 
   render() {
-    alert('userloaded: ' + this.state.userLoaded)
     if (this.state.userLoaded) {
-
       return (
           <Navigator
               initialRoute={{name: this.state.initialView}}

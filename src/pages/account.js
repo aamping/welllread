@@ -67,18 +67,21 @@ export default class account extends Component {
     );
   }
 
-  logout(){
-
-    firebaseApp.auth().signOut().then(function() {
-      // Sign-out successful.
-      this.props.navigator.push({
-        component: Login
-      });
-    }).catch(function(error) {
+  async logout(){
+    try{
+      await firebaseApp.auth().signOut();
+        // Sign-out successful.
+        setTimeout(() => {
+            this.props.navigator.push({
+                name: "Login"
+            })
+         }, 1500);
+    }
+    catch(error) {
       // An error happened.
-      alert('error signout')
-    });
+      alert ('signed out error', error);
 
+    }
   }
 
 }

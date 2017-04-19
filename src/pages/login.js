@@ -42,7 +42,6 @@ export default class login extends Component {
     return (
       <View style={styles.container}>
         <Header text="Login" loaded={this.state.loaded} />
-        <View style={styles.body}>
           <TextInput
             style={styles.textinput}
             onChangeText={(text) => this.setState({email: text})}
@@ -68,7 +67,7 @@ export default class login extends Component {
             onpress={this.goToSignup.bind(this)}
             button_styles={styles.transparent_button}
             button_text_styles={styles.transparent_button_text} />
-        </View>
+        
       </View>
     );
   }
