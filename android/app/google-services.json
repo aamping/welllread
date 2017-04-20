@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "422230366379",
+    "firebase_url": "https://wellread-42df8.firebaseio.com",
+    "project_id": "wellread-42df8",
+    "storage_bucket": "wellread-42df8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:422230366379:android:c3336152f3081f89",
+        "android_client_info": {
+          "package_name": "com.wellread"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "422230366379-6qrfkdpkunhfq57rmve9r2fdkma19sm8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyASc4BWvpXJ93ICUisiYjszkLpkH6CELss"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

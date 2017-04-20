@@ -16,6 +16,7 @@ import DismissKeyboard from 'react-native-dismiss-keyboard';
 
 import Button from '../components/button';
 import Header from '../components/header';
+import FireAuth from 'react-native-firebase-auth'; //https://github.com/SolidStateGroup/react-native-firebase-auth
 
 import Signup from './signup';
 import Account from './account';
@@ -29,6 +30,7 @@ export default class login extends Component {
 
   constructor(props){
     super(props);
+    FireAuth.init();
 
     this.state = {
       email: '',
@@ -37,6 +39,11 @@ export default class login extends Component {
       loaded: true
     }
   }
+
+  componentDidMount() {
+  FireAuth.setup(this.onLogin, this.onUserChange, this.onLogout, this.emailVerified, this.onError);
+  }
+
 
   render(){
     return (
@@ -63,11 +70,23 @@ export default class login extends Component {
             button_text_styles={styles.primary_button_text} />
 
           <Button
+            text="Facebook"
+            onpress={this.loginFacebook.bind(this)}
+            button_styles={styles.primary_button}
+            button_text_styles={styles.primary_button_text} />
+
+            <Button
+              text="Google"
+              onpress={this.loginGoogle.bind(this)}
+              button_styles={styles.primary_button}
+              button_text_styles={styles.primary_button_text} />
+
+          <Button
             text="New here?"
             onpress={this.goToSignup.bind(this)}
             button_styles={styles.transparent_button}
             button_text_styles={styles.transparent_button_text} />
-        
+
       </View>
     );
   }
@@ -105,6 +124,13 @@ export default class login extends Component {
         }
 
     }
+
+  async loginFacebook(){
+      await FireAuth.facebookLogin();
+  }
+  async loginGoogle(){
+      await FireAuth.googleLogin();
+  }
 
   goToSignup(){
     this.props.navigator.push({

@@ -9,4 +9,6 @@ const firebaseConfig = {
   storageBucket: "wellread-42df8.appspot.com",
   messagingSenderId: "422230366379"
 }
+
+
 export const firebaseApp = firebase.initializeApp(firebaseConfig)
