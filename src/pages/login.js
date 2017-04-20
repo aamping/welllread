@@ -30,7 +30,7 @@ export default class login extends Component {
 
   constructor(props){
     super(props);
-    FireAuth.init();
+    FireAuth.init({iosClientId: '422230366379-oif8s1pk22nelc8r5khe6hf8kmf2jb4l.apps.googleusercontent.com'});
 
     this.state = {
       email: '',
