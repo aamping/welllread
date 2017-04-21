@@ -126,15 +126,14 @@ android {
 }
 
 dependencies {
-    compile project(':react-native-google-signin')
-    compile project(':react-native-fbsdk')
-    compile(project(":react-native-google-sign-in")) { // ADD this
-        exclude group: "com.google.android.gms"
-    }
     compile fileTree(dir: "libs", include: ["*.jar"])
+    compile project(':react-native-fbsdk')
+    compile(project(":react-native-google-signin")){         
+        exclude group: "com.google.android.gms" // very important
+    } 
     compile "com.android.support:appcompat-v7:23.0.1"
     compile project(':react-native-facebook-login')
-    compile "com.google.android.gms:play-services-auth:10.0.1" // Add this, not 9.8.0 (from instructions).
+    compile 'com.google.android.gms:play-services-auth:9.2.1' // should be at least 9.0.0.
     compile "com.facebook.react:react-native:+"  // From node_modules
 }
 
@@ -145,4 +144,4 @@ task copyDownloadableDepsToLibs(type: Copy) {
     from configurations.compile
     into 'libs'
 }
-apply plugin: "com.google.gms.google-services" // Add this after dependencies.
+apply plugin: 'com.google.gms.google-services' // <--- this should be the last line
