@@ -127,9 +127,29 @@ export default class login extends Component {
 
   async loginFacebook(){
       await FireAuth.facebookLogin();
+      this.setState({
+          response: "Logged In!",
+          loaded: false
+      });
+
+      setTimeout(() => {
+          this.props.navigator.push({
+              name: "Home"
+          })
+      }, 1500);
   }
   async loginGoogle(){
       await FireAuth.googleLogin();
+      this.setState({
+          response: "Logged In!",
+          loaded: false
+      });
+
+      setTimeout(() => {
+          this.props.navigator.push({
+              name: "Home"
+          })
+      }, 1500);
   }
 
   goToSignup(){
