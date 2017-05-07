@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">WellRead</string>
+    <string name="fb_app_id">1894235427464967</string>
+    <string name="fb_login_protocol_scheme">fb1894235427464967</string>
 </resources>

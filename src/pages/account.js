@@ -6,21 +6,30 @@ import React, {
 
 import {
   AppRegistry,
+  ActivityIndicator,
+  AsyncStorage,
   StyleSheet,
   Text,
   View,
   Image,
-  AsyncStorage
+  TouchableHighlight,
+  ToolbarAndroid
 } from 'react-native';
 
-import Button from '../components/button';
-import Header from '../components/header';
+import { Header,Container,Title, Content, List, ListItem, InputGroup, Input, Icon, Picker, Button } from 'native-base';
 
 import Login from './login';
 
 import styles from '../styles/common-styles.js';
 
-const firebaseApp = require('firebase');
+const accountStyles = StyleSheet.create({
+  email_container: {
+    padding: 20
+  },
+  email_text: {
+    fontSize: 18
+  }
+});
 
 
 export default class account extends Component {
@@ -29,7 +38,8 @@ export default class account extends Component {
 
     super(props);
     this.state = {
-      loaded: false,
+      user: null,
+      loading: true
     }
 
   }
@@ -37,62 +47,75 @@ export default class account extends Component {
   componentWillMount(){
 
       this.setState({
-        user: firebaseApp.auth().currentUser,
-        loaded: true
+        user: this.props.firebaseApp.auth().currentUser,
+        loading: false
       });
 
   }
 
-  render(){
-
-    return (
-      <View style={styles.container}>
-        <Header text="Account" loaded={this.state.loaded} />
-        <View style={styles.body}>
-        {
-          this.state.user &&
-            <View style={styles.body}>
-              <View style={page_styles.email_container}>
-                <Text style={page_styles.email_text}>{this.state.user.email}</Text>
-              </View>
-              <Button
-                  text="Logout"
-                  onpress={this.logout.bind(this)}
-                  button_styles={styles.primary_button}
-                  button_text_styles={styles.primary_button_text} />
-            </View>
-        }
-        </View>
-      </View>
-    );
-  }
-
-  async logout(){
+  async logout() {
+    this.setState({
+      loading: true
+    });
+    // logout, once that is complete, return the user to the login screen.
     try{
-      await firebaseApp.auth().signOut();
+      await this.props.firebaseApp.auth().signOut();
+
+      this.setState({
+        response: "Logged out"
+      });
         // Sign-out successful.
         setTimeout(() => {
             this.props.navigator.push({
-                name: "Login"
+                component: Login
             })
          }, 1500);
+
     }
     catch(error) {
       // An error happened.
+      this.setState({
+        loading: false,
+        response: "Error Logged out"
+      });
       alert ('signed out error', error);
 
     }
   }
 
+  render() {
+      // If we are loading then we display the indicator, if the account is null and we are not loading
+      // Then we display nothing. If the account is not null then we display the account info.
+      const content = this.state.loading ?
+      <ActivityIndicator size="large"/> :
+         this.state.user &&
+                   <Content>
+                      <View style={accountStyles.email_container}>
+                        <Text style={accountStyles.email_text}>{this.state.user.email}</Text>
+                      </View>
+                      <Image
+                        style={styles.image}
+                        source={{uri: this.state.user.photoURL}} />
+                      <Button onPress={this.logout.bind(this)} style={styles_primaryButton}>
+                        <Text>
+                        Logout
+                        </Text>
+                      </Button>
+                  </Content>
+        ;
+        // console.log("loading user",this.state.user,this.state.loading);
+      return (
+          <Container>
+          <Header>
+              <Title>Header</Title>
+          </Header>
+            {content}
+        </Container>
+      );
+    }
+
 }
 
-const page_styles = StyleSheet.create({
-  email_container: {
-    padding: 20
-  },
-  email_text: {
-    fontSize: 18
-  }
-});
+const styles_primaryButton = StyleSheet.flatten(styles.primaryButton);
 
 AppRegistry.registerComponent('account', () => account);

@@ -6,19 +6,17 @@ import React, {
 
 import {
   AppRegistry,
-  Text,
-  TextInput,
-  View
+  View,
+  ToolbarAndroid,
+  StyleSheet,
+  ActivityIndicator
 } from 'react-native';
+
+import { Header,Title,Container, Content, List, ListItem, InputGroup, Input, Icon, Text, Picker, Button } from 'native-base';
 
 import DismissKeyboard from 'react-native-dismiss-keyboard';
 
-import Button from '../components/button';
-import Header from '../components/header';
-
 import Login from './login';
-
-const firebaseApp = require('firebase');
 
 import styles from '../styles/common-styles.js';
 
@@ -28,7 +26,7 @@ export default class signup extends Component {
     super(props);
 
     this.state = {
-      loaded: true,
+      loading: false,
       email: '',
       password: '',
       response: ''
@@ -37,21 +35,22 @@ export default class signup extends Component {
 
   async signup() {
          this.setState({
-               loaded: false
+               loading: true
          });
 
          DismissKeyboard();
 
          try {
-             await firebaseApp.auth().createUserWithEmailAndPassword(this.state.email, this.state.password);
+             await this.props.firebaseApp.auth().createUserWithEmailAndPassword(this.state.email, this.state.password);
 
              this.setState({
-                 response: "account created"
+                 response: "account created",
+                 loading: false
              });
 
              setTimeout(() => {
                  this.props.navigator.push({
-                     name: "Home"
+                     component: Login
                  })
              }, 1500);
 
@@ -64,12 +63,12 @@ export default class signup extends Component {
               } else {
                alert(errorMessage);
               }
+              this.setState({
+                  response: "Error Signup",
+                  loading: false
+              });
          }
-         this.setState({
-             email: '',
-             password: '',
-             loaded: true
-         });
+
 
      }
 
@@ -78,39 +77,55 @@ export default class signup extends Component {
         name: "Login"
     })
   }
-
   render() {
-    return (
-
-      <View style={styles.container}>
-        <Header text="Signup" loaded={this.state.loaded} />
-            <TextInput
-                style={styles.textinput}
-                onChangeText={(text) => this.setState({email: text})}
-                value={this.state.email}
-            placeholder={"Email Address"}
-            />
-          <TextInput
-            style={styles.textinput}
-            onChangeText={(text) => this.setState({password: text})}
-            value={this.state.password}
-            secureTextEntry={true}
-            placeholder={"Password"}
-          />
-          <Button
-            text="Signup"
-            onpress={this.signup.bind(this)}
-            button_styles={styles.primary_button}
-            button_text_styles={styles.primary_button_text} />
-
-          <Button
-            text="Got an Account?"
-            onpress={this.goToLogin.bind(this)}
-            button_styles={styles.transparent_button}
-            button_text_styles={styles.transparent_button_text} />
-      </View>
-    );
+    // The content of the screen should be inputs for a username, password and submit button.
+    // If we are loading then we display an ActivityIndicator.
+    const content = this.state.loading ? <ActivityIndicator size="large"/> :
+           <Content>
+                <List>
+                 <ListItem>
+                     <InputGroup>
+                     <Icon name="ios-person" style={{ color: '#0A69FE' }} />
+                     <Input
+                      onChangeText={(text) => this.setState({email: text})}
+                      value={this.state.email}
+                      placeholder={"Email Address"} />
+                      </InputGroup>
+                </ListItem>
+                <ListItem>
+                    <InputGroup>
+                      <Icon name="ios-unlock" style={{ color: '#0A69FE' }} />
+                    <Input
+                      onChangeText={(text) => this.setState({password: text})}
+                      value={this.state.password}
+                      secureTextEntry={true}
+                      placeholder={"Password"} />
+                    </InputGroup>
+               </ListItem>
+              </List>
+              <Button style={styles_primaryButton} onPress={this.signup.bind(this)}>
+                <Text>
+                Signup
+                </Text>
+              </Button>
+              <Button onPress={this.goToLogin.bind(this)} style={styles_primaryButton}>
+                <Text>
+                Go to Login
+                </Text>
+              </Button>
+      </Content>
+    ;
+    // A simple UI with a toolbar, and content below it.
+        return (
+                  <Container>
+                  <Header>
+                     <Title>Sign Up</Title>
+                  </Header>
+                  {content}
+                  </Container>
+                )
   }
 }
+const styles_primaryButton = StyleSheet.flatten(styles.primaryButton);
 
 AppRegistry.registerComponent('signup', () => signup);

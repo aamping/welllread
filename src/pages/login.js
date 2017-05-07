@@ -6,22 +6,25 @@ import React, {
 
 import {
   AppRegistry,
-  StyleSheet,
-  Text,
-  TextInput,
-  View
+  View,
+  ToolbarAndroid,
+  ActivityIndicator,
+    StyleSheet
 } from 'react-native';
+
+import { Header,Container,Title, Content, List, ListItem, InputGroup, Input, Icon, Text, Picker, Button } from 'native-base';
 
 import DismissKeyboard from 'react-native-dismiss-keyboard';
 
-import Button from '../components/button';
-import Header from '../components/header';
+//import Button from '../components/button';
+//import Header from '../components/header';
 
 import Signup from './signup';
 import Account from './account';
 
-const firebaseApp = require('firebase');
 //import firebaseApp from '../firebase';
+import FireAuth from 'react-native-firebase-auth'; //https://github.com/SolidStateGroup/react-native-firebase-auth
+import {FBLogin, FBLoginManager} from 'react-native-facebook-login';
 
 import styles from '../styles/common-styles.js';
 
@@ -34,65 +37,35 @@ export default class login extends Component {
       email: '',
       password: '',
       response: "",
-      loaded: true
+      loading: false
     }
   }
-
-  render(){
-    return (
-      <View style={styles.container}>
-        <Header text="Login" loaded={this.state.loaded} />
-          <TextInput
-            style={styles.textinput}
-            onChangeText={(text) => this.setState({email: text})}
-            value={this.state.email}
-            placeholder={"Email Address"}
-          />
-          <TextInput
-            style={styles.textinput}
-            onChangeText={(text) => this.setState({password: text})}
-            value={this.state.password}
-            secureTextEntry={true}
-            placeholder={"Password"}
-          />
-
-          <Button
-            text="Login"
-            onpress={this.login.bind(this)}
-            button_styles={styles.primary_button}
-            button_text_styles={styles.primary_button_text} />
-
-          <Button
-            text="New here?"
-            onpress={this.goToSignup.bind(this)}
-            button_styles={styles.transparent_button}
-            button_text_styles={styles.transparent_button_text} />
-        
-      </View>
-    );
-  }
-
   async login() {
+
+        this.setState({
+            loading: true
+        });
 
         DismissKeyboard();
 
         try {
-            await firebaseApp.auth().signInWithEmailAndPassword(this.state.email, this.state.password);
+            await this.props.firebaseApp.auth().signInWithEmailAndPassword(this.state.email, this.state.password);
 
-            this.setState({
-                response: "Logged In!",
-                loaded: false
-            });
+
 
             setTimeout(() => {
                 this.props.navigator.push({
-                    name: "Home"
+                    component: Account
                 })
             }, 1500);
+            this.setState({
+                response: "Logged In!"
+            });
 
         } catch (error) {
             this.setState({
-                response: error.toString()
+                response: error.toString(),
+                loading: false
             })
             // Handle Errors here.
             var errorCode = error.code;
@@ -105,13 +78,78 @@ export default class login extends Component {
         }
 
     }
+  async fblogin(){
+      await FireAuth.facebookLogin();
+      this.setState({
+          response: "Logged In!",
+          loading: false
+      });
+
+      setTimeout(() => {
+          this.props.navigator.push({
+              name: "Home"
+          })
+      }, 1500);
+  }
 
   goToSignup(){
     this.props.navigator.push({
-        name: "Signup"
+        component: Signup
     })
   }
 
+  render() {
+      // The content of the screen should be inputs for a username, password and submit button.
+      // If we are loading then we display an ActivityIndicator.
+      const content = this.state.loading ?
+      <View style={styles.body}>
+      <ActivityIndicator size="large"/>
+      </View> :
+
+      <Content>
+                     <List>
+                       <ListItem>
+                           <InputGroup>
+                           <Icon name="ios-person" style={{ color: '#0A69FE' }} />
+                           <Input
+                            onChangeText={(text) => this.setState({email: text})}
+                            value={this.state.email}
+                            placeholder={"Email Address"} />
+                            </InputGroup>
+                      </ListItem>
+                      <ListItem>
+                          <InputGroup>
+                            <Icon name="ios-unlock" style={{ color: '#0A69FE' }} />
+                          <Input
+                            onChangeText={(text) => this.setState({password: text})}
+                            value={this.state.password}
+                            secureTextEntry={true}
+                            placeholder={"Password"} />
+                          </InputGroup>
+                     </ListItem>
+                    </List>
+                    <Button style={styles_primaryButton} onPress={this.login.bind(this)}>
+                      <Text> Login </Text>
+                    </Button>
+                    <Button onPress={this.goToSignup.bind(this)} style={styles_primaryButton}>
+                      <Text> New Here? </Text>
+                    </Button>
+            </Content>
+          ;
+
+      // A simple UI with a toolbar, and content below it.
+          return (
+                    <Container>
+                              <Header>
+                                <Title> Login </Title>
+                             </Header>
+
+                    {content}
+                  </Container>
+                  );
+    }
 }
+
+const styles_primaryButton = StyleSheet.flatten(styles.primaryButton);
 
 AppRegistry.registerComponent('login', () => login);

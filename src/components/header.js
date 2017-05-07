@@ -23,7 +23,7 @@ export default class header extends Component {
           <Text style={styles.header_text}>{this.props.text}</Text>
         </View>
         <View style={styles.header_item}>
-        {  !this.props.loaded &&
+        {  !this.props.loading &&
             <GiftedSpinner />
         }
         </View>

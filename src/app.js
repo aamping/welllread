@@ -4,8 +4,13 @@ import React, {
 
 import {
     AppRegistry,
+    ActivityIndicator,
+    AsyncStorage,
+    StyleSheet,
     Navigator,
-    View
+    Text,
+    View,
+    ToolbarAndroid
 } from "react-native";
 
 import styles from "./styles/common-styles.js";
@@ -14,50 +19,44 @@ import Home from "./pages/home";
 import Login from "./pages/login";
 import Signup from "./pages/signup"
 import Account from "./pages/account";
-const firebaseApp = require('firebase');
-import firebaseInit from './firebase';
+import * as firebase from 'firebase';  // Initialize Firebase
+var firebaseConfig = require ('./firebaseData.json');
+
+  // firebase.initializeApp(fireBaseconfig);
+const firebaseApp = firebase.initializeApp(firebaseConfig);
 
 class App extends Component {
 
   constructor(props) {
     super(props);
 
-
-    this.getInitialView();
-
     this.state = {
-      userLoaded: false,
-      initialView: null,
-      loaded: false
+      openingPage: null,
+      loading: false
     };
 
-    this.getInitialView = this.getInitialView.bind(this);
-
   }
-
-  getInitialView() {
-
+  componentWillMount(){
+    //Check if userData is stored on device else open Login
     firebaseApp.auth().onAuthStateChanged((user) => {
-
-      if (user){
-        alert('user signed in');
-      }
-      else{
-        let initialView = user ? "Home" : "Login";
-        alert('initialView');
-        this.setState({
-          userLoaded: true,
-          initialView: initialView
-        })
+      let openingPage = {openingPage: Login};
+      if(user != null){
+        this.setState({openingPage:Account});
+      }else{
+        this.setState(openingPage);
       }
     });
-
-
   }
 
   static renderScene(route, navigator) {
 
-    switch (route.name) {
+    if(route.component){
+              // Pass the navigator the the page so it can navigate as well.
+              // Pass firebaseApp so it can make calls to firebase.
+              return React.createElement(route.component, { navigator, firebaseApp});
+    }
+
+    /*switch (route.name) {
 
       case "Home":
         return (<Home navigator={navigator} />);
@@ -74,7 +73,7 @@ class App extends Component {
       case "Account":
         return (<Account navigator={navigator} />);
         break;
-    }
+    }*/
 
   }
 
@@ -92,23 +91,25 @@ class App extends Component {
   }
 
   render() {
-    if (this.state.userLoaded) {
+    if (this.state.openingPage) {
       return (
           <Navigator
-              initialRoute={{name: this.state.initialView}}
+              initialRoute={{component: this.state.openingPage}}
               renderScene={App.renderScene}
               configureScene={App.configureScene}
           />);
     } else {
       return (
-        <View style={styles.container}>
-          <Header text="React Native Firebase Auth" loaded={this.state.loaded} />
-          <View style={styles.body}></View>
-        </View>);
-    }
-
-  }
-
+        // Our default loading view while waiting to hear back from firebase
+       <View style={styles.container}>
+         <ToolbarAndroid title="Login" />
+         <View style={styles.body}>
+           <ActivityIndicator size="large" />
+         </View>
+       </View>
+     );
+   }
+ }
 }
 
 export default App;
