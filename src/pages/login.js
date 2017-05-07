@@ -17,6 +17,8 @@ import { Header,Container,Title, Content, List, ListItem, InputGroup, Input, Ico
 
 import DismissKeyboard from 'react-native-dismiss-keyboard';
 
+import FBLoginView from '../components/FBLoginView'
+
 //import Button from '../components/button';
 //import Header from '../components/header';
 
@@ -80,18 +82,43 @@ export default class login extends Component {
 
     }
   async fblogin(){
+
+      this.setState({
+          loading: true
+      });
+
+      DismissKeyboard();
       await FireAuth.facebookLogin();
       this.setState({
-          response: "Logged In!",
-          loading: false
+          response: "Logged In!"
       });
 
       setTimeout(() => {
           this.props.navigator.push({
-              name: "Home"
+              component: Account
           })
       }, 1500);
   }
+  async Glogin(){
+
+    this.setState({
+        loading: true
+    });
+
+    DismissKeyboard();
+
+    await FireAuth.googleLogin();
+    this.setState({
+        response: "Logged In!"
+    });
+
+    setTimeout(() => {
+        this.props.navigator.push({
+            component: Account
+        })
+    }, 1500);
+  }
+
 
   goToSignup(){
     this.props.navigator.push({
@@ -135,6 +162,23 @@ export default class login extends Component {
                     <Button onPress={this.goToSignup.bind(this)} style={styles_primaryButton}>
                       <Text> New Here? </Text>
                     </Button>
+                    <Button onPress={this.Glogin.bind(this)} style={styles_primaryButton}>
+                      <Text> Google Login </Text>
+                    </Button>
+
+                    <FBLogin
+
+                        ref={(fbLogin) => { this.fbLogin = fbLogin }}
+                        loginBehavior={FBLoginManager.LoginBehaviors.Native}
+                        permissions={["email","user_friends"]}
+                        onLogin={function(e){console.log(e)}}
+                        onLoginFound={function(e){console.log(e)}}
+                        onLoginNotFound={function(e){console.log(e)}}
+                        onLogout={function(e){console.log(e)}}
+                        onCancel={function(e){console.log(e)}}
+                        onPermissionsMissing={function(e){console.log(e)}}
+                      />
+
             </Content>
           ;
 

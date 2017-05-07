@@ -1,0 +1,66 @@
+[33mcommit 9d4a9c59240ff2846a86851be40ff809916e6e12[m
+Merge: 5073a8e 5a4de4f
+Author: aamping <albert.arco@gmail.com>
+Date:   Sun May 7 22:39:47 2017 +0800
+
+    Merge branch 'master' into NewUI
+
+[33mcommit 5073a8e06adfdb2334a0652b936410b5c61030f1[m
+Author: aamping <albert.arco@gmail.com>
+Date:   Sun May 7 22:38:05 2017 +0800
+
+    first
+
+[33mcommit 48e7ea2122ec5abaa994c0de2fce7fd4d4a2f4d7[m
+Author: aamping <albert.arco@gmail.com>
+Date:   Sun May 7 21:19:32 2017 +0800
+
+    Registration and UI new - Missing Oauth
+
+[33mcommit 5a4de4fd334f2491a533db9d4689113b2bc36c83[m
+Author: aamping <albert.arco@gmail.com>
+Date:   Tue Apr 25 00:41:15 2017 +0800
+
+    working on external device
+
+[33mcommit 5ee77e48d316fd4ead4107bcc38fb48437892f75[m
+Author: aamping <albert.arco@gmail.com>
+Date:   Mon Apr 24 23:30:04 2017 +0800
+
+    working in FB and G
+
+[33mcommit 7f44d7836f904a0ab6de290dadbcd711da03f94e[m
+Author: aamping <alberto.arco@PN-HPES01.pn.local>
+Date:   Fri Apr 21 17:12:06 2017 +0800
+
+    Build apk issues
+
+[33mcommit 211f93c798864cb6e49f4c831e3ae5f6e1bbf26a[m
+Author: aamping <albert.arco@gmail.com>
+Date:   Fri Apr 21 07:49:22 2017 +0800
+
+    rngooglesignin_buttomsize
+
+[33mcommit d12e70a3fe9a887260c0bc91c406f5597cd6a764[m
+Author: aamping <albert.arco@gmail.com>
+Date:   Fri Apr 21 00:21:55 2017 +0800
+
+    working in google and facebooksignin
+
+[33mcommit 7614d83ab4811a243477cde74d4e9286c7f10ba2[m
+Author: aamping <albert.arco@gmail.com>
+Date:   Thu Apr 20 01:04:53 2017 +0800
+
+    LoginSignUp working
+
+[33mcommit 55dbf5f2dea2bc931359cd6d0155cbf6965d5227[m
+Author: aamping <albert.arco@gmail.com>
+Date:   Tue Apr 18 23:27:11 2017 +0800
+
+    firebase fixed
+
+[33mcommit 352bc030f8f47e0bd9e81321e6a831200f08a1c8[m
+Author: aamping <albert.arco@gmail.com>
+Date:   Tue Apr 18 00:56:59 2017 +0800
+
+    first commit
