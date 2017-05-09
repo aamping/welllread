@@ -40,6 +40,7 @@ export default class login extends Component {
       email: '',
       password: '',
       response: "",
+      credentials: "",
       loading: false
     }
   }
@@ -81,17 +82,24 @@ export default class login extends Component {
         }
 
     }
-  async fblogin(){
+  async loginFacebook(credential){
 
       this.setState({
-          loading: true
+          loading: false
       });
-
       DismissKeyboard();
-      await FireAuth.facebookLogin();
+      alert('toke '+ credential.token);
+
+
+      await this.props.firebaseApp.auth()
+      .signInWithCredential(credential.token)
+      .then(() => alert('Account accepted'))
+      .catch((error) => alert('Account disabled'));
+
       this.setState({
           response: "Logged In!"
       });
+
 
       setTimeout(() => {
           this.props.navigator.push({
@@ -129,7 +137,9 @@ export default class login extends Component {
   render() {
       // The content of the screen should be inputs for a username, password and submit button.
       // If we are loading then we display an ActivityIndicator.
+      var _this = this;
       const content = this.state.loading ?
+
       <View style={styles.body}>
       <ActivityIndicator size="large"/>
       </View> :
@@ -165,23 +175,20 @@ export default class login extends Component {
                     <Button onPress={this.Glogin.bind(this)} style={styles_primaryButton}>
                       <Text> Google Login </Text>
                     </Button>
-
                     <FBLogin
-
                         ref={(fbLogin) => { this.fbLogin = fbLogin }}
                         loginBehavior={FBLoginManager.LoginBehaviors.Native}
                         permissions={["email","user_friends"]}
-                        onLogin={function(e){console.log(e)}}
+                        onLogin={(data) => this.loginFacebook(data.credentials)}
                         onLoginFound={function(e){console.log(e)}}
                         onLoginNotFound={function(e){console.log(e)}}
                         onLogout={function(e){console.log(e)}}
                         onCancel={function(e){console.log(e)}}
                         onPermissionsMissing={function(e){console.log(e)}}
                       />
-
             </Content>
-          ;
 
+          ;
       // A simple UI with a toolbar, and content below it.
           return (
                     <Container>
