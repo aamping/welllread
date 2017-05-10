@@ -30,7 +30,7 @@ import FireAuth from 'react-native-firebase-auth'; //https://github.com/SolidSta
 import {FBLogin, FBLoginManager} from 'react-native-facebook-login';
 
 import styles from '../styles/common-styles.js';
-
+const firebase = require('firebase');
 export default class login extends Component {
 
   constructor(props){
@@ -41,7 +41,8 @@ export default class login extends Component {
       password: '',
       response: "",
       credentials: "",
-      loading: false
+      loading: false,
+      data: null
     }
   }
   async login() {
@@ -82,23 +83,56 @@ export default class login extends Component {
         }
 
     }
-  async loginFacebook(credential){
+
+  authenticate (token) {
+       const provider = firebase.auth.FacebookAuthProvider;
+       const credential = provider.credential(token);
+       alert("signing");
+       return this.props.firebaseApp.auth().signInWithCredential(credential);
+   }
+
+  async loginFacebook(){
 
       this.setState({
           loading: false
       });
-      DismissKeyboard();
-      alert('toke '+ credential.token);
 
+      var _this = this;
+      const fire = this.props.firebaseApp
+      DismissKeyboard();
+
+    await FBLoginManager.loginWithPermissions(['email'], (error,data) =>{
+      if (!error) {
+        this.setState({
+            data: data
+        });
+        const provider = this.firebase.auth.FacebookAuthProvider;
+        const credential = provider.credential(data.credentials.token);
+        return this.props.firebaseApp.auth().signInWithCredential(credential);
+            //this.firebaselogin.bind(this);
+          } else {
+          console.log(error, data);
+      }});
+
+
+/*
+      const credentials = this.props.firebaseApp.auth.FacebookAuthProvider.credential(this.state.data.credentials.token);
+      this.props.firebaseApp
+        .auth()
+        .signInWithCredential(credentials)
+        .then(() => alert('Account accepted'))
+        .catch((error) => alert('Account disabled'));
 
       await this.props.firebaseApp.auth()
       .signInWithCredential(credential.token)
       .then(() => alert('Account accepted'))
       .catch((error) => alert('Account disabled'));
-
+*/
       this.setState({
           response: "Logged In!"
       });
+
+
 
 
       setTimeout(() => {
@@ -175,17 +209,10 @@ export default class login extends Component {
                     <Button onPress={this.Glogin.bind(this)} style={styles_primaryButton}>
                       <Text> Google Login </Text>
                     </Button>
-                    <FBLogin
-                        ref={(fbLogin) => { this.fbLogin = fbLogin }}
-                        loginBehavior={FBLoginManager.LoginBehaviors.Native}
-                        permissions={["email","user_friends"]}
-                        onLogin={(data) => this.loginFacebook(data.credentials)}
-                        onLoginFound={function(e){console.log(e)}}
-                        onLoginNotFound={function(e){console.log(e)}}
-                        onLogout={function(e){console.log(e)}}
-                        onCancel={function(e){console.log(e)}}
-                        onPermissionsMissing={function(e){console.log(e)}}
-                      />
+                    <Button onPress={this.loginFacebook.bind(this)} style={styles_primaryButton}>
+                      <Text> Facebook Login </Text>
+                    </Button>
+
             </Content>
 
           ;
