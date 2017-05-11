@@ -38,19 +38,17 @@ export default class account extends Component {
 
     super(props);
     this.state = {
-      user: null,
+      user: this.props.user,
       loading: true
     }
 
   }
 
   componentWillMount(){
-
       this.setState({
-        user: this.props.firebaseApp.auth().currentUser,
+        //user: this.props.firebaseApp.auth().currentUser,
         loading: false
       });
-
   }
 
   async logout() {

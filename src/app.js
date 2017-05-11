@@ -25,6 +25,8 @@ var firebaseConfig = require ('./firebaseData.json');
   // firebase.initializeApp(fireBaseconfig);
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 
+var user;
+
 class App extends Component {
 
   constructor(props) {
@@ -38,9 +40,11 @@ class App extends Component {
   }
   componentWillMount(){
     //Check if userData is stored on device else open Login
+
     firebaseApp.auth().onAuthStateChanged((user) => {
       let openingPage = {openingPage: Login};
       if(user != null){
+        this.user = user;
         this.setState({openingPage:Account});
       }else{
         this.setState(openingPage);
@@ -53,28 +57,8 @@ class App extends Component {
     if(route.component){
               // Pass the navigator the the page so it can navigate as well.
               // Pass firebaseApp so it can make calls to firebase.
-              return React.createElement(route.component, { navigator, firebaseApp});
+              return React.createElement(route.component, { navigator, firebaseApp, user});
     }
-
-    /*switch (route.name) {
-
-      case "Home":
-        return (<Home navigator={navigator} />);
-        break;
-
-      case "Login":
-        return (<Login navigator={navigator} />);
-        break;
-
-      case "Signup":
-        return (<Signup navigator={navigator} />);
-        break;
-
-      case "Account":
-        return (<Account navigator={navigator} />);
-        break;
-    }*/
-
   }
 
   static configureScene(route) {
@@ -111,5 +95,5 @@ class App extends Component {
    }
  }
 }
-
+AppRegistry.registerComponent('app', () => APP);
 export default App;

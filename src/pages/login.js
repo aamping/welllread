@@ -24,13 +24,16 @@ import FBLoginView from '../components/FBLoginView'
 
 import Signup from './signup';
 import Account from './account';
+import APP from '../app';
 
 //import firebaseApp from '../firebase';
 import FireAuth from 'react-native-firebase-auth'; //https://github.com/SolidStateGroup/react-native-firebase-auth
+
+const firebase = require('firebase');
 import {FBLogin, FBLoginManager} from 'react-native-facebook-login';
 
 import styles from '../styles/common-styles.js';
-const firebase = require('firebase');
+
 export default class login extends Component {
 
   constructor(props){
@@ -45,6 +48,9 @@ export default class login extends Component {
       data: null
     }
   }
+
+
+
   async login() {
 
         this.setState({
@@ -60,7 +66,7 @@ export default class login extends Component {
 
             setTimeout(() => {
                 this.props.navigator.push({
-                    component: Account
+                    component: APP
                 })
             }, 1500);
             this.setState({
@@ -84,63 +90,43 @@ export default class login extends Component {
 
     }
 
-  authenticate (token) {
+  async authenticateFacebook (token){
        const provider = firebase.auth.FacebookAuthProvider;
        const credential = provider.credential(token);
-       alert("signing");
-       return this.props.firebaseApp.auth().signInWithCredential(credential);
+       await this.props.firebaseApp.auth().signInWithCredential(credential)
+       .then((user) =>{
+
+         if (user){
+         this.setState({
+             response: "Logged In!"
+         });
+         setTimeout(() => {
+             this.props.navigator.push({
+                 component: APP
+             })
+         }, 1500);
+       }
+       });
+       return true;
    }
 
   async loginFacebook(){
 
       this.setState({
-          loading: false
+          loading: true
       });
 
-      var _this = this;
-      const fire = this.props.firebaseApp
       DismissKeyboard();
 
-    await FBLoginManager.loginWithPermissions(['email'], (error,data) =>{
+      await FBLoginManager.loginWithPermissions(['email'],(error,data) =>{
       if (!error) {
-        this.setState({
-            data: data
-        });
-        const provider = this.firebase.auth.FacebookAuthProvider;
-        const credential = provider.credential(data.credentials.token);
-        return this.props.firebaseApp.auth().signInWithCredential(credential);
-            //this.firebaselogin.bind(this);
+        this.authenticateFacebook(data.credentials.token);
+
           } else {
           console.log(error, data);
       }});
-
-
-/*
-      const credentials = this.props.firebaseApp.auth.FacebookAuthProvider.credential(this.state.data.credentials.token);
-      this.props.firebaseApp
-        .auth()
-        .signInWithCredential(credentials)
-        .then(() => alert('Account accepted'))
-        .catch((error) => alert('Account disabled'));
-
-      await this.props.firebaseApp.auth()
-      .signInWithCredential(credential.token)
-      .then(() => alert('Account accepted'))
-      .catch((error) => alert('Account disabled'));
-*/
-      this.setState({
-          response: "Logged In!"
-      });
-
-
-
-
-      setTimeout(() => {
-          this.props.navigator.push({
-              component: Account
-          })
-      }, 1500);
   }
+  
   async Glogin(){
 
     this.setState({
