@@ -7,11 +7,12 @@ import {
     ActivityIndicator,
     AsyncStorage,
     StyleSheet,
-    Navigator,
     Text,
     View,
     ToolbarAndroid
 } from "react-native";
+
+import NavigationExperimental from 'react-native-deprecated-custom-components';
 
 import styles from "./styles/common-styles.js";
 import Header from "./components/header"
@@ -67,17 +68,16 @@ class App extends Component {
       return (route.sceneConfig);
     } else {
       return ({
-        ...Navigator.SceneConfigs.HorizontalSwipeJump,
+        ...NavigationExperimental.Navigator.SceneConfigs.HorizontalSwipeJump,
         gestures: {}
       });
     }
-
   }
-
+  
   render() {
     if (this.state.openingPage) {
       return (
-          <Navigator
+          <NavigationExperimental.Navigator
               initialRoute={{component: this.state.openingPage}}
               renderScene={App.renderScene}
               configureScene={App.configureScene}
