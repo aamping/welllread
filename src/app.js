@@ -7,7 +7,6 @@ import {
     ActivityIndicator,
     AsyncStorage,
     StyleSheet,
-    Navigator,
     Text,
     View,
     ToolbarAndroid
@@ -21,6 +20,7 @@ import Signup from "./pages/signup"
 import Account from "./pages/account";
 import * as firebase from 'firebase';  // Initialize Firebase
 var firebaseConfig = require ('./firebaseData.json');
+import NavigationExperimental from 'react-native-deprecated-custom-components';
 
   // firebase.initializeApp(fireBaseconfig);
 const firebaseApp = firebase.initializeApp(firebaseConfig);
@@ -67,7 +67,7 @@ class App extends Component {
       return (route.sceneConfig);
     } else {
       return ({
-        ...Navigator.SceneConfigs.HorizontalSwipeJump,
+        ...NavigationExperimental.Navigator.SceneConfigs.HorizontalSwipeJump,
         gestures: {}
       });
     }
@@ -77,7 +77,7 @@ class App extends Component {
   render() {
     if (this.state.openingPage) {
       return (
-          <Navigator
+          <NavigationExperimental.Navigator
               initialRoute={{component: this.state.openingPage}}
               renderScene={App.renderScene}
               configureScene={App.configureScene}

@@ -16,7 +16,7 @@ import {
   ToolbarAndroid
 } from 'react-native';
 
-import { Header,Container,Title, Content, List, ListItem, InputGroup, Input, Icon, Picker, Button } from 'native-base';
+import { Left, Right, Header,Container,Title, Content, List, ListItem, InputGroup, Input, Icon, Picker, Button } from 'native-base';
 
 import Login from './login';
 
@@ -46,7 +46,7 @@ export default class account extends Component {
 
   componentWillMount(){
       this.setState({
-        //user: this.props.firebaseApp.auth().currentUser,
+        user: this.props.firebaseApp.auth().currentUser,
         loading: false
       });
   }
